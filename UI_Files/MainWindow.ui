@@ -72,17 +72,17 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="get_lastBlock_button">
+   <widget class="QPushButton" name="get_blockchain_button">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>90</y>
-      <width>101</width>
+      <y>70</y>
+      <width>121</width>
       <height>32</height>
      </rect>
     </property>
     <property name="text">
-     <string>Get last block</string>
+     <string>Get blocks history</string>
     </property>
    </widget>
    <widget class="QPushButton" name="sign_transaction_button">
@@ -122,6 +122,19 @@
     </property>
     <property name="text">
      <string>Select Document</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="get_txHistory_button">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>121</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Get my Tx history</string>
     </property>
    </widget>
   </widget>
