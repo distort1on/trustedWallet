@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>login_window</class>
- <widget class="QWidget" name="login_window">
+ <class>restore_window</class>
+ <widget class="QWidget" name="restore_window">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,21 +11,8 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Sign in</string>
+   <string>Restore Wallet</string>
   </property>
-  <widget class="QPushButton" name="register_button">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>280</y>
-     <width>100</width>
-     <height>35</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Create Wallet</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="logo_label">
    <property name="geometry">
     <rect>
@@ -46,9 +33,9 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>80</y>
+     <y>90</y>
      <width>411</width>
-     <height>201</height>
+     <height>204</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -56,7 +43,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QLineEdit" name="login_input">
+     <widget class="QLineEdit" name="login_restore_input">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -84,7 +71,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="password_input">
+     <widget class="QLineEdit" name="password_restore_input">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -112,7 +99,63 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="login_button">
+     <widget class="QLineEdit" name="password_restore_input_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+      <property name="placeholderText">
+       <string>Repeat password:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="seed_phrase_input">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Normal</enum>
+      </property>
+      <property name="placeholderText">
+       <string>Seed Phrase:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="restore_wallet_button">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
         <horstretch>0</horstretch>
@@ -126,7 +169,7 @@
        </size>
       </property>
       <property name="text">
-       <string>Sign in</string>
+       <string>Restore Wallet</string>
       </property>
      </widget>
     </item>
@@ -147,19 +190,6 @@
      </spacer>
     </item>
    </layout>
-  </widget>
-  <widget class="QPushButton" name="restore_wallet_button">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>280</y>
-     <width>100</width>
-     <height>35</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Restore Wallet</string>
-   </property>
   </widget>
  </widget>
  <resources/>

@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10grpcClient.proto\x1a\x1bgoogle/protobuf/empty.proto\"i\n\x08\x43reateTx\x12\x15\n\rsenderAddress\x18\x01 \x01(\x0c\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\x12\x0e\n\x06pubKey\x18\x03 \x01(\x0c\x12\x11\n\tsignature\x18\x04 \x01(\x0c\x12\x15\n\rdocumentBytes\x18\x05 \x01(\x0c\"\"\n\x0e\x43reateResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"\x1d\n\x04User\x12\x15\n\rsenderAddress\x18\x01 \x01(\x0c\"C\n\x0b\x42lockHeader\x12\x0f\n\x07version\x18\x01 \x01(\x04\x12\x15\n\rHashPrevBlock\x18\x02 \x01(\x0c\x12\x0c\n\x04Time\x18\x03 \x01(\x03\"q\n\x05\x42lock\x12\x11\n\tblocksize\x18\x01 \x01(\x04\x12!\n\x0b\x62lockheader\x18\x02 \x01(\x0b\x32\x0c.BlockHeader\x12\x11\n\tTxCounter\x18\x03 \x01(\x04\x12\x1f\n\x0ctransactions\x18\x04 \x03(\x0b\x32\t.CreateTx2\xda\x01\n\x08Invoicer\x12/\n\x11\x41\x64\x64TxToBlockchain\x12\t.CreateTx\x1a\x0f.CreateResponse\x12\x37\n\x0cGetLastBlock\x12\x16.google.protobuf.Empty\x1a\x0f.CreateResponse\x12\x38\n\rGetBlockchain\x12\x16.google.protobuf.Empty\x1a\x0f.CreateResponse\x12*\n\x10GetUserTxHistory\x12\x05.User\x1a\x0f.CreateResponseB\x1bZ\x19trustedStorage/grpsServerb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10grpcClient.proto\x1a\x1bgoogle/protobuf/empty.proto\"n\n\x08\x43reateTx\x12\x15\n\rsenderAddress\x18\x01 \x01(\x0c\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\x12\x0e\n\x06pubKey\x18\x03 \x01(\x0c\x12\x11\n\tsignature\x18\x04 \x01(\x0c\x12\r\n\x05nonce\x18\x05 \x01(\x03\x12\x0b\n\x03\x63id\x18\x06 \x01(\x0c\"\"\n\x0e\x43reateResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"\x1d\n\x04User\x12\x15\n\rsenderAddress\x18\x01 \x01(\x0c\"\x1d\n\x0bTransaction\x12\x0e\n\x06txHash\x18\x01 \x01(\x0c\" \n\x08\x44ocument\x12\x14\n\x0c\x64ocumentHash\x18\x01 \x01(\x0c\"C\n\x0b\x42lockHeader\x12\x0f\n\x07version\x18\x01 \x01(\x04\x12\x15\n\rHashPrevBlock\x18\x02 \x01(\x0c\x12\x0c\n\x04Time\x18\x03 \x01(\x03\"q\n\x05\x42lock\x12\x11\n\tblocksize\x18\x01 \x01(\x04\x12!\n\x0b\x62lockheader\x18\x02 \x01(\x0b\x32\x0c.BlockHeader\x12\x11\n\tTxCounter\x18\x03 \x01(\x04\x12\x1f\n\x0ctransactions\x18\x04 \x03(\x0b\x32\t.CreateTx2\xba\x02\n\x08Invoicer\x12/\n\x11\x41\x64\x64TxToBlockchain\x12\t.CreateTx\x1a\x0f.CreateResponse\x12\x37\n\x0cGetLastBlock\x12\x16.google.protobuf.Empty\x1a\x0f.CreateResponse\x12\x38\n\rGetBlockchain\x12\x16.google.protobuf.Empty\x1a\x0f.CreateResponse\x12*\n\x10GetUserTxHistory\x12\x05.User\x1a\x0f.CreateResponse\x12,\n\x0bGetTxByHash\x12\x0c.Transaction\x1a\x0f.CreateResponse\x12\x30\n\x12\x46indDocumentByHash\x12\t.Document\x1a\x0f.CreateResponseB\x1bZ\x19trustedStorage/grpsServerb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'grpcClient_pb2', globals())
@@ -23,15 +23,19 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'Z\031trustedStorage/grpsServer'
   _CREATETX._serialized_start=49
-  _CREATETX._serialized_end=154
-  _CREATERESPONSE._serialized_start=156
-  _CREATERESPONSE._serialized_end=190
-  _USER._serialized_start=192
-  _USER._serialized_end=221
-  _BLOCKHEADER._serialized_start=223
-  _BLOCKHEADER._serialized_end=290
-  _BLOCK._serialized_start=292
-  _BLOCK._serialized_end=405
-  _INVOICER._serialized_start=408
-  _INVOICER._serialized_end=626
+  _CREATETX._serialized_end=159
+  _CREATERESPONSE._serialized_start=161
+  _CREATERESPONSE._serialized_end=195
+  _USER._serialized_start=197
+  _USER._serialized_end=226
+  _TRANSACTION._serialized_start=228
+  _TRANSACTION._serialized_end=257
+  _DOCUMENT._serialized_start=259
+  _DOCUMENT._serialized_end=291
+  _BLOCKHEADER._serialized_start=293
+  _BLOCKHEADER._serialized_end=360
+  _BLOCK._serialized_start=362
+  _BLOCK._serialized_end=475
+  _INVOICER._serialized_start=478
+  _INVOICER._serialized_end=792
 # @@protoc_insertion_point(module_scope)

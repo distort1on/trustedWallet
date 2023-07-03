@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ResponseWindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.2
+## Created by: Qt User Interface Compiler version 6.4.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -27,6 +27,7 @@ class Ui_Response(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.text_field = QPlainTextEdit(Response)
         self.text_field.setObjectName(u"text_field")
+        self.text_field.setReadOnly(True)
 
         self.horizontalLayout.addWidget(self.text_field)
 

@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'LoginWindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.2
+## Created by: Qt User Interface Compiler version 6.4.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -73,6 +73,9 @@ class Ui_login_window(object):
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
+        self.restore_wallet_button = QPushButton(login_window)
+        self.restore_wallet_button.setObjectName(u"restore_wallet_button")
+        self.restore_wallet_button.setGeometry(QRect(60, 280, 100, 35))
 
         self.retranslateUi(login_window)
 
@@ -90,5 +93,6 @@ class Ui_login_window(object):
         self.password_input.setText("")
         self.password_input.setPlaceholderText(QCoreApplication.translate("login_window", u"Password:", None))
         self.login_button.setText(QCoreApplication.translate("login_window", u"Sign in", None))
+        self.restore_wallet_button.setText(QCoreApplication.translate("login_window", u"Restore Wallet", None))
     # retranslateUi
 

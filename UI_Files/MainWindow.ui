@@ -61,7 +61,7 @@
      <rect>
       <x>70</x>
       <y>10</y>
-      <width>561</width>
+      <width>491</width>
       <height>21</height>
      </rect>
     </property>
@@ -70,19 +70,6 @@
     </property>
     <property name="readOnly">
      <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="get_blockchain_button">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>121</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Get blocks history</string>
     </property>
    </widget>
    <widget class="QPushButton" name="sign_transaction_button">
@@ -111,30 +98,14 @@
      <string>Send Transaction</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="select_document_button">
+   <widget class="QComboBox" name="comboBox">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>90</y>
-      <width>121</width>
-      <height>32</height>
+      <x>560</x>
+      <y>1</y>
+      <width>81</width>
+      <height>41</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Select Document</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="get_txHistory_button">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>121</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Get my Tx history</string>
     </property>
    </widget>
   </widget>
@@ -147,8 +118,56 @@
      <height>24</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuGet_Information">
+    <property name="title">
+     <string>Get Information</string>
+    </property>
+    <addaction name="actionRequest_blocksHistory"/>
+    <addaction name="actionRequest_txHistory"/>
+    <addaction name="action_show_Find_tx_by_hash_window"/>
+    <addaction name="actionFind_document"/>
+    <addaction name="actionShow_my_seed_phrase"/>
+   </widget>
+   <widget class="QMenu" name="menuAction">
+    <property name="title">
+     <string>Action</string>
+    </property>
+    <addaction name="actionAdd_KeyPair"/>
+   </widget>
+   <addaction name="menuGet_Information"/>
+   <addaction name="menuAction"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionRequest_blocksHistory">
+   <property name="text">
+    <string>Request blocks history</string>
+   </property>
+  </action>
+  <action name="actionRequest_txHistory">
+   <property name="text">
+    <string>Request my TX history</string>
+   </property>
+  </action>
+  <action name="actionAdd_KeyPair">
+   <property name="text">
+    <string>Add KeyPair</string>
+   </property>
+  </action>
+  <action name="actionShow_my_seed_phrase">
+   <property name="text">
+    <string>Show my seed phrase</string>
+   </property>
+  </action>
+  <action name="action_show_Find_tx_by_hash_window">
+   <property name="text">
+    <string>Find TX by hash</string>
+   </property>
+  </action>
+  <action name="actionFind_document">
+   <property name="text">
+    <string>Find document</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

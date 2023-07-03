@@ -35,6 +35,16 @@ class InvoicerStub(object):
                 request_serializer=grpcClient__pb2.User.SerializeToString,
                 response_deserializer=grpcClient__pb2.CreateResponse.FromString,
                 )
+        self.GetTxByHash = channel.unary_unary(
+                '/Invoicer/GetTxByHash',
+                request_serializer=grpcClient__pb2.Transaction.SerializeToString,
+                response_deserializer=grpcClient__pb2.CreateResponse.FromString,
+                )
+        self.FindDocumentByHash = channel.unary_unary(
+                '/Invoicer/FindDocumentByHash',
+                request_serializer=grpcClient__pb2.Document.SerializeToString,
+                response_deserializer=grpcClient__pb2.CreateResponse.FromString,
+                )
 
 
 class InvoicerServicer(object):
@@ -64,6 +74,18 @@ class InvoicerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetTxByHash(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def FindDocumentByHash(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_InvoicerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -85,6 +107,16 @@ def add_InvoicerServicer_to_server(servicer, server):
             'GetUserTxHistory': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUserTxHistory,
                     request_deserializer=grpcClient__pb2.User.FromString,
+                    response_serializer=grpcClient__pb2.CreateResponse.SerializeToString,
+            ),
+            'GetTxByHash': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetTxByHash,
+                    request_deserializer=grpcClient__pb2.Transaction.FromString,
+                    response_serializer=grpcClient__pb2.CreateResponse.SerializeToString,
+            ),
+            'FindDocumentByHash': grpc.unary_unary_rpc_method_handler(
+                    servicer.FindDocumentByHash,
+                    request_deserializer=grpcClient__pb2.Document.FromString,
                     response_serializer=grpcClient__pb2.CreateResponse.SerializeToString,
             ),
     }
@@ -161,6 +193,40 @@ class Invoicer(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Invoicer/GetUserTxHistory',
             grpcClient__pb2.User.SerializeToString,
+            grpcClient__pb2.CreateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetTxByHash(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Invoicer/GetTxByHash',
+            grpcClient__pb2.Transaction.SerializeToString,
+            grpcClient__pb2.CreateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def FindDocumentByHash(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Invoicer/FindDocumentByHash',
+            grpcClient__pb2.Document.SerializeToString,
             grpcClient__pb2.CreateResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
