@@ -27,14 +27,20 @@ import base64
 
 CURRENT_USER = ""
 USER_PASSWORD = ""
+SOCKET = "localhost:8083"
+
 
 def generate_private_key(seed):
     secexp = randrange_from_seed__trytryagain(seed, NIST256p.order)
     return SigningKey.from_secret_exponent(secexp, curve=NIST256p, hashfunc=hashlib.sha256())
 
-class Login_Window(QWidget):
+
+class LoginWindow(QWidget):
     def __init__(self):
-        super(Login_Window, self).__init__()
+        super(LoginWindow, self).__init__()
+        self.register_window = None
+        self.RestoreWindow = None
+        self.main_window = None
         self.ui = Ui_login_window()
         self.setFixedSize(530, 326)
         self.ui.setupUi(self)
@@ -47,11 +53,10 @@ class Login_Window(QWidget):
         self.register_window = RegisterWindow()
         self.register_window.show()
 
-
     @QtCore.Slot()
     def show_restore_wallet_window(self):
-        self.restore_window = Restore_Window()
-        self.restore_window.show()
+        self.RestoreWindow = RestoreWindow()
+        self.RestoreWindow.show()
 
     @QtCore.Slot()
     def show_main_window(self):
@@ -84,10 +89,9 @@ class FindTxWindow(QWidget):
 
     @QtCore.Slot()
     def get_tx_by_hash_action(self):
-        socket = 'localhost:8083'
-        channel = grpc.insecure_channel(socket)
+        channel = grpc.insecure_channel(SOCKET)
         client = grpcClient_pb2_grpc.InvoicerStub(channel)
-        log.info(f"Connected to the Server : {socket}")
+        log.info(f"Connected to the Server : {SOCKET}")
         tx_hash = bytes.fromhex(self.ui.tx_hash_input.text())
 
         response = client.GetTxByHash(grpcClient_pb2.Transaction(
@@ -104,6 +108,9 @@ class FindTxWindow(QWidget):
 class FindDocumentWindow(QWidget):
     def __init__(self):
         super(FindDocumentWindow, self).__init__()
+        self.document_bytes = None
+        self.data = None
+        self.path = None
         self.ui = Ui_find_document_by_hash_window()
         self.setFixedSize(630, 115)
         self.ui.setupUi(self)
@@ -132,10 +139,9 @@ class FindDocumentWindow(QWidget):
 
     @QtCore.Slot()
     def find_document_by_hash_action(self):
-        socket = 'localhost:8083'
-        channel = grpc.insecure_channel(socket)
+        channel = grpc.insecure_channel(SOCKET)
         client = grpcClient_pb2_grpc.InvoicerStub(channel)
-        log.info(f"Connected to the Server : {socket}")
+        log.info(f"Connected to the Server : {SOCKET}")
 
         response = client.FindDocumentByHash(grpcClient_pb2.Document(
             documentHash=self.data,
@@ -146,11 +152,6 @@ class FindDocumentWindow(QWidget):
         self.ui.response_window.show()
         self.ui.response_window.ui.text_field.setPlainText(response.response)
         channel.close()
-
-
-
-
-
 
 
 class RegisterWindow(QWidget):
@@ -178,7 +179,6 @@ class RegisterWindow(QWidget):
                 mnemo = Mnemonic("english")
                 words = mnemo.generate(strength=256).encode('utf-8')
                 sk_pem = generate_private_key(words + b'1').to_pem()
-                #sk_pem = SigningKey.generate(curve=NIST256p, hashfunc=hashlib.sha256).to_pem()
 
                 cipher_seed = AES.new(pad(self.ui.create_password_input.text()).encode(), AES.MODE_EAX)
                 ciphertext_seed, _ = cipher_seed.encrypt_and_digest(words)
@@ -193,9 +193,10 @@ class RegisterWindow(QWidget):
             QMessageBox.information(self, "Ok", "Account created\n\nYour seed phrase:\n\n" + words.decode('utf-8'))
             self.close()
 
-class Restore_Window(QWidget):
+
+class RestoreWindow(QWidget):
     def __init__(self):
-        super(Restore_Window, self).__init__()
+        super(RestoreWindow, self).__init__()
         self.ui = Ui_restore_window()
         self.setFixedSize(530, 326)
         self.ui.setupUi(self)
@@ -234,7 +235,6 @@ class Restore_Window(QWidget):
             self.close()
 
 
-
 class Response(QWidget):
     def __init__(self):
         super(Response, self).__init__()
@@ -245,45 +245,35 @@ class Response(QWidget):
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.doc_cid = None
+        self.signature = None
+        self.nonce = None
+        self.document_bytes = None
+        self.data = None
+        self.path = None
+        self.sk = None
+        self.find_document_window = None
+        self.find_tx_window = None
+        self.body = None
+        self.sender_address = None
+        self.vk = None
+        self.pubkey = None
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.create_transaction_button.clicked.connect(self.create_transaction_action)
         self.ui.sign_transaction_button.clicked.connect(self.sign_transaction_action)
         self.ui.send_transaction_button.clicked.connect(self.send_transaction_action)
         self.ui.actionRequest_blocksHistory.triggered.connect(self.get_blockchain_action)
-        self.ui.actionRequest_txHistory.triggered.connect(self.get_TxHistory_action)
+        self.ui.actionRequest_txHistory.triggered.connect(self.get_tx_history_action)
         self.ui.action_show_Find_tx_by_hash_window.triggered.connect(self.show_find_tx_window)
         self.ui.actionFind_document.triggered.connect(self.show_find_document_window)
-        self.ui.actionAdd_KeyPair.triggered.connect(self.action_add_keyPair)
+        self.ui.actionAdd_KeyPair.triggered.connect(self.action_add_key_pair)
         self.ui.actionShow_my_seed_phrase.triggered.connect(self.show_my_seed_phrase_action)
         self.ui.comboBox.currentIndexChanged.connect(self.key_pair_changed)
         with shelve.open("databases/" + CURRENT_USER + "_keys.db") as db:
             for i in range(len(db.keys()) - 1):
-                self.ui.comboBox.addItem(str(i+1) + " pair")
+                self.ui.comboBox.addItem(str(i + 1) + " pair")
         self.load_key_pair('1')
-
-
-
-        # self.ui.listWidget.addItem(":tx1")
-        # self.ui.listWidget.addItem(":tx2")
-        # self.ui.listWidget.addItem(":tx3")
-        # self.ui.listWidget.addItem(":tx4")
-        #
-        # self.ui.listWidget.itemDoubleClicked.connect(self.double_clicked)
-
-        # self.ui.textEdit.setText("MC5wIGd5dANsVXuiZ4fGI7awLPstDqsUOPLFMItJ05U=")
-
-        # pubTest = base64.b64decode(str.encode(self.body["PubKey"]))
-        # v_test = VerifyingKey.from_pem(pubTest.decode('utf-8'))
-        #
-        # sig_test = base64.b64decode(str.encode(self.body["Signature"]))
-        # data_test = hashlib.sha256(b'hello').digest()
-        #
-        # print(sig_test)
-        # print(v_test.verify(sig_test, data_test, hashfunc=hashlib.sha256, sigdecode=sigdecode_der))
-
-        # sk_pem = sk.to_pem()
-        # vk_pem = vk.to_pem()
 
     @QtCore.Slot()
     def double_clicked(self, item):
@@ -295,21 +285,10 @@ class MainWindow(QMainWindow):
         self.sender_address = hashlib.sha256(self.vk.to_pem()).digest()
         self.pubkey = self.vk.to_pem()
         self.ui.user_address.setText(self.sender_address.hex())
-        #self.nonce =
+
         self.select_document_action()
 
-        self.body = {}
-        self.body["SenderAddress"] = self.sender_address.hex()
-        #self.body["SenderAddress"] = base64.b64encode(self.sender_address).decode('utf-8')
-        self.body["Data"] = self.data.hex()
-        self.body["PubKey"] = self.pubkey.hex()
-
-        # self.body = {
-        #     "SenderAddress": base64.b64encode(self.sender_address).decode('utf-8'),
-        #     "Data": base64.b64encode(self.data).decode('utf-8'),
-        #     "PubKey": base64.b64encode(self.pubkey).decode('utf-8'),
-        #     "Signature": base64.b64encode(self.signature).decode('utf-8'),
-        # }
+        self.body = {"SenderAddress": self.sender_address.hex(), "Data": self.data.hex(), "PubKey": self.pubkey.hex()}
 
         self.ui.tx_info_edit.setPlainText(json.dumps(self.body, indent=2))
 
@@ -325,10 +304,9 @@ class MainWindow(QMainWindow):
 
     @QtCore.Slot()
     def get_blockchain_action(self):
-        socket = 'localhost:8083'
-        channel = grpc.insecure_channel(socket)
+        channel = grpc.insecure_channel(SOCKET)
         client = grpcClient_pb2_grpc.InvoicerStub(channel)
-        log.info(f"Connected to the Server : {socket}")
+        log.info(f"Connected to the Server : {SOCKET}")
 
         empty = grpcClient_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         response = client.GetBlockchain(empty)
@@ -338,14 +316,9 @@ class MainWindow(QMainWindow):
         self.ui.response_window.ui.text_field.setPlainText(response.response)
 
         channel.close()
-        # vk_pem = "-----BEGIN EC PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEiHLwzGZVS14sn9p6TnfAS9O8MvJD\nn181ONxzl2QlVcxM6cz2nbDfRX6q3raLXeCBHzbqh4PgpZt0OxcKgv/FKw==\n-----END EC PUBLIC KEY-----"
-        # vk = VerifyingKey.from_pem(sk_pem, hashfunc=hashlib.sha256)
 
     @QtCore.Slot()
     def send_transaction_action(self):
-        # url = 'http://localhost:8080/blockchain/'
-        # x = requests.post(url, json=self.body)
-        # print(x.status_code)
         try:
             api = ipfsApi.Client('127.0.0.1', 5001)
             doc_cid = api.add(self.path)[0]['Hash']
@@ -354,11 +327,9 @@ class MainWindow(QMainWindow):
 
             self.ui.tx_info_edit.setPlainText(json.dumps(self.body, indent=2))
 
-            socket = 'localhost:8083'
-            channel = grpc.insecure_channel(socket)
+            channel = grpc.insecure_channel(SOCKET)
             client = grpcClient_pb2_grpc.InvoicerStub(channel)
-            log.info(f"Connected to the Server : {socket}")
-
+            log.info(f"Connected to the Server : {SOCKET}")
 
             response = client.AddTxToBlockchain(grpcClient_pb2.CreateTx(
                 senderAddress=self.sender_address,
@@ -372,8 +343,6 @@ class MainWindow(QMainWindow):
             channel.close()
         except Exception as e:
             QMessageBox.information(self, "Error", str(e))
-
-
 
     @QtCore.Slot()
     def sign_transaction_action(self):
@@ -405,12 +374,10 @@ class MainWindow(QMainWindow):
         self.data = h.digest()
 
     @QtCore.Slot()
-    def get_TxHistory_action(self):
-        socket = 'localhost:8083'
-        channel = grpc.insecure_channel(socket)
+    def get_tx_history_action(self):
+        channel = grpc.insecure_channel(SOCKET)
         client = grpcClient_pb2_grpc.InvoicerStub(channel)
-        log.info(f"Connected to the Server : {socket}")
-
+        log.info(f"Connected to the Server : {SOCKET}")
 
         response = client.GetUserTxHistory(grpcClient_pb2.User(
             senderAddress=self.sender_address,
@@ -421,7 +388,6 @@ class MainWindow(QMainWindow):
         self.ui.response_window.ui.text_field.setPlainText(response.response)
         channel.close()
 
-
     @QtCore.Slot()
     def show_my_seed_phrase_action(self):
         global CURRENT_USER, USER_PASSWORD
@@ -429,32 +395,29 @@ class MainWindow(QMainWindow):
         with shelve.open("databases/" + CURRENT_USER + "_keys.db") as db:
             value = db['seed_phrase']
 
-        nonce = value[len(value)-16:]
-        seed_encoded = value[:len(value)-16]
+        nonce = value[len(value) - 16:]
+        seed_encoded = value[:len(value) - 16]
         cipher = AES.new(pad(USER_PASSWORD).encode(), AES.MODE_EAX, nonce=nonce)
         seed_decoded = cipher.decrypt(seed_encoded)
         QMessageBox.information(self, "Ok", "Your seed phrase:\n\n" + seed_decoded.decode('utf-8'))
-
-
 
     @QtCore.Slot()
     def key_pair_changed(self, index):
         self.load_key_pair(index + 1)
 
-
     @QtCore.Slot()
-    def action_add_keyPair(self):
+    def action_add_key_pair(self):
         global CURRENT_USER, USER_PASSWORD
 
         with shelve.open("databases/" + CURRENT_USER + "_keys.db") as db:
             value = db['seed_phrase']
 
-        nonce = value[len(value)-16:]
-        seed_encoded = value[:len(value)-16]
+        nonce = value[len(value) - 16:]
+        seed_encoded = value[:len(value) - 16]
         cipher = AES.new(pad(USER_PASSWORD).encode(), AES.MODE_EAX, nonce=nonce)
         seed_decoded = cipher.decrypt(seed_encoded)
 
-        #sk_pem = SigningKey.generate(curve=NIST256p, hashfunc=hashlib.sha256).to_pem()
+        # sk_pem = SigningKey.generate(curve=NIST256p, hashfunc=hashlib.sha256).to_pem()
         sk_pem = generate_private_key(seed_decoded + str(self.ui.comboBox.count() + 1).encode('utf-8')).to_pem()
 
         cipher = AES.new(pad(USER_PASSWORD).encode(), AES.MODE_EAX)
@@ -465,7 +428,6 @@ class MainWindow(QMainWindow):
 
         self.ui.comboBox.addItem(str(self.ui.comboBox.count() + 1) + " pair")
         QMessageBox.information(self, "Ok", "New key pair created")
-
 
     def load_key_pair(self, index):
         global CURRENT_USER, USER_PASSWORD
@@ -497,7 +459,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon('resources/window_icon.png'))
 
-    login = Login_Window()
+    login = LoginWindow()
     login.show()
 
     sys.exit(app.exec())
